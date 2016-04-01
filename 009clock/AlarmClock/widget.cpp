@@ -1,14 +1,13 @@
 #include "widget.h"
 #include "ui_widget.h"
 
+
 int TimeUpFlag=1;
-long Ctime=0;
 long CsTimeConfig;
 long AllFinished;
 long AllUnFinished;
 QTimer *Alarmtimer = new QTimer;
 QTimer *Caltimer = new QTimer;
-
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -17,6 +16,8 @@ Widget::Widget(QWidget *parent) :
     ui->setupUi(this);
     //初始化读取设置
     ReadSettings();
+    Ctime=0;
+    qDebug()<<"start CTIME:"<<Ctime;
     //字符编码设置
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");//情况1
     QTextCodec::setCodecForTr(codec);
@@ -34,7 +35,9 @@ Widget::Widget(QWidget *parent) :
     connect(Alarmtimer, SIGNAL(timeout()), this, SLOT(alarm()));
     Alarmtimer->start(500);
     //显示时间
-    connect(timer, SIGNAL(timeout()), this, SLOT(CalTime()));
+    connect(Caltimer, SIGNAL(timeout()), this, SLOT(CalTime()));
+    // 注意定时器的槽函数与信号连接问题
+    //2016年4月1日11:19:01
     showTime();
     setWindowTitle("后台机报文浏览助手");
     //初始化文字显示颜色
@@ -77,10 +80,14 @@ void Widget::alarm()
 {
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
-//    AllFinished++;
-//    AllUnFinished++;
-//    qDebug()<<"alarm AllFinished:"<<AllFinished;
-//    qDebug()<<"alarm AllUnFinished:"<<AllUnFinished;
+    AllFinished++;
+    AllUnFinished++;
+//    CsTimeConfig++;
+    qDebug()<<"alarm AllFinished:"<<AllFinished;
+    qDebug()<<"alarm AllUnFinished:"<<AllUnFinished;
+    qDebug()<<"alarm CsTimeConfig:"<<CsTimeConfig;
+    qDebug()<<"alarm CTIME:"<<Ctime;
+
     int a1h=time.hour()==ui->timeEdit1->time().hour();
     int a1m=time.minute()==ui->timeEdit1->time().minute();
     int a1s=time.second()==ui->timeEdit1->time().second();
@@ -101,19 +108,22 @@ void Widget::alarm()
        TimeUpFlag=0;
        //停止报警提醒定时器
        Alarmtimer->stop();
+       //开始超时计时器
+       Caltimer->start(500);
        //记录并且显示文本
        LogandShow(TimeUP);      
        while(!TimeUpFlag)
        {
 
            int btn=QMessageBox::information(NULL, "时间到!", "请浏览后台机报文！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
 //           Sleep(3000);
            if(QMessageBox::Yes == btn)
            {
-
+               //停止超时计时器
+               Caltimer->stop();
                //记录并且显示文本
                LogandShow(AfterClick);
+               Ctime=0;
                TimeUpFlag=1;
                //重新启动定时器
                Alarmtimer->start(500);
@@ -122,7 +132,10 @@ void Widget::alarm()
            else
               //保持界面整齐美观
            {
+               //停止超时计时器
+               Caltimer->stop();
                LogandShow(AfterClick);
+               Ctime=0;
                TimeUpFlag=1;
                Alarmtimer->start(500);
            }
@@ -137,9 +150,9 @@ void Widget::alarm()
  */
 void Widget::TimeAlarmInit()
 {
-    ui->timeEdit1->setTime(QTime::QTime(12,10,00));
-    ui->timeEdit2->setTime(QTime::QTime(12,20,00));
-    ui->timeEdit3->setTime(QTime::QTime(12,30,00));
+    ui->timeEdit1->setTime(QTime::QTime(10,55,00));
+    ui->timeEdit2->setTime(QTime::QTime(9,55,00));
+    ui->timeEdit3->setTime(QTime::QTime(9,55,00));
 }
 
 /*
@@ -152,12 +165,12 @@ void Widget::LogandShow(int select)
     QFile logfile("log.txt");
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
-            qDebug()<<"Can't open the file!";
-            //   | QIODevice::Text
+      qDebug()<<"Can't open the file!";
     }
     QTime time = QTime::currentTime();
     QString TimeToShow = time.toString("hh:mm:ss");
-    QString TextTimeToShow = time.toString("yyyy-mm-dd hh:mm:ss");
+    QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    qDebug()<<"TextTimeToShow:"<<TextTimeToShow;
     //时间到进行的提示
     if(select == 1)
    {
@@ -168,29 +181,25 @@ void Widget::LogandShow(int select)
         //显示设置
         ui->textEdit->append(TimeToShow+" 时间到，请浏览报文！");
         //文件浏览
-//        logfile.write(QString::toStdString(TimeToShow));
-        //
-//        QByteArray TextTime = TimeToShow.toLatin1();
-//        const char *c_str2 = TextTime.data();
-        logfile.write("  时间到，请浏览报文！\n");
-        //??????????????????????????
-        //??????????????????????????
+        QByteArray TextTime = TextTimeToShow.toLatin1();
+        const char *c_str2 = TextTime.data();
+        qDebug()<<"TextTime:"<<c_str2;
+        logfile.write(c_str2);
+        logfile.close();
+        logfile.write(" 时间到，请浏览报文！\n");
         //??????????????????????????
         logfile.close();
        //初始化超时设置  启动超时定时器
-        Ctime=0;
-        Caltimer->start(60000);
-        //1分钟的定时
    }
     //点击后进行的记录
     else if(select == 2)
    {
         Caltimes(UnFinished);
-        Caltimer->stop();
         //判断是否超时
         //CsTimeConfig 全局变量计时阈值
         if(Ctime<CsTimeConfig)
         {
+            qDebug()<<"TIME UP CTIME:"<<Ctime;
             QSound::play("2.wav");
             ui->textEdit->append(TimeToShow+" 点击确认，开始浏览报文！");
             logfile.write(" 点击确认，开始浏览报文！\n");
@@ -202,8 +211,8 @@ void Widget::LogandShow(int select)
             ui->textEdit->append(TimeToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
             logfile.write(" 确认超时，请按时浏览报文！\n");
-//            QSound::play("2.wav");
         }
+//        Ctime=0;
         logfile.close();
    }
 
@@ -220,6 +229,8 @@ void Widget::LogandShow(int select)
 void Widget::CalTime()
 {
    Ctime++;
+   qDebug()<<"CalTime i am running!!";
+   qDebug()<<"CTIME:"<<Ctime;
 }
 /*
  *读取设置

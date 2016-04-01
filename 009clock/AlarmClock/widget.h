@@ -31,11 +31,12 @@ public:
     void ReadSettings();
     void WriteSettings();
     void Caltimes(int select);
-//    void InitSystemTray();
+
     ~Widget();
     
 private:
     Ui::Widget *ui;
+    long Ctime;
 private slots:
     void showTime();
     void alarm();
