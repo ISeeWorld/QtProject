@@ -17,7 +17,7 @@ Widget::Widget(QWidget *parent) :
     //初始化读取设置
     ReadSettings();
     Ctime=0;
-    qDebug()<<"start CTIME:"<<Ctime;
+//    qDebug()<<"start CTIME:"<<Ctime;
     //字符编码设置
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");//情况1
     QTextCodec::setCodecForTr(codec);
@@ -80,13 +80,13 @@ void Widget::alarm()
 {
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
-    AllFinished++;
-    AllUnFinished++;
-//    CsTimeConfig++;
-    qDebug()<<"alarm AllFinished:"<<AllFinished;
-    qDebug()<<"alarm AllUnFinished:"<<AllUnFinished;
-    qDebug()<<"alarm CsTimeConfig:"<<CsTimeConfig;
-    qDebug()<<"alarm CTIME:"<<Ctime;
+//    AllFinished++;
+//    AllUnFinished++;
+////    CsTimeConfig++;
+//    qDebug()<<"alarm AllFinished:"<<AllFinished;
+//    qDebug()<<"alarm AllUnFinished:"<<AllUnFinished;
+//    qDebug()<<"alarm CsTimeConfig:"<<CsTimeConfig;
+//    qDebug()<<"alarm CTIME:"<<Ctime;
 
     int a1h=time.hour()==ui->timeEdit1->time().hour();
     int a1m=time.minute()==ui->timeEdit1->time().minute();
@@ -109,7 +109,7 @@ void Widget::alarm()
        //停止报警提醒定时器
        Alarmtimer->stop();
        //开始超时计时器
-       Caltimer->start(500);
+       Caltimer->start(1000);
        //记录并且显示文本
        LogandShow(TimeUP);      
        while(!TimeUpFlag)
@@ -150,9 +150,9 @@ void Widget::alarm()
  */
 void Widget::TimeAlarmInit()
 {
-    ui->timeEdit1->setTime(QTime::QTime(10,55,00));
-    ui->timeEdit2->setTime(QTime::QTime(9,55,00));
-    ui->timeEdit3->setTime(QTime::QTime(9,55,00));
+    ui->timeEdit1->setTime(QTime::QTime(8,30,00));
+    ui->timeEdit2->setTime(QTime::QTime(14,30,00));
+    ui->timeEdit3->setTime(QTime::QTime(19,30,00));
 }
 
 /*
@@ -165,12 +165,13 @@ void Widget::LogandShow(int select)
     QFile logfile("log.txt");
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
-      qDebug()<<"Can't open the file!";
+//      qDebug()<<"Can't open the file!";
+        QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);
     }
     QTime time = QTime::currentTime();
     QString TimeToShow = time.toString("hh:mm:ss");
     QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    qDebug()<<"TextTimeToShow:"<<TextTimeToShow;
+//    qDebug()<<"TextTimeToShow:"<<TextTimeToShow;
     //时间到进行的提示
     if(select == 1)
    {
@@ -183,7 +184,7 @@ void Widget::LogandShow(int select)
         //文件浏览
         QByteArray TextTime = TextTimeToShow.toLatin1();
         const char *c_str2 = TextTime.data();
-        qDebug()<<"TextTime:"<<c_str2;
+//        qDebug()<<"TextTime:"<<c_str2;
         logfile.write(c_str2);
         logfile.close();
         logfile.write(" 时间到，请浏览报文！\n");
@@ -194,23 +195,29 @@ void Widget::LogandShow(int select)
     //点击后进行的记录
     else if(select == 2)
    {
-        Caltimes(UnFinished);
+
         //判断是否超时
         //CsTimeConfig 全局变量计时阈值
-        if(Ctime<CsTimeConfig)
+        //单位是分钟
+
+        if(Ctime<(CsTimeConfig*60))
         {
-            qDebug()<<"TIME UP CTIME:"<<Ctime;
+            //点击确认没有超时
+//            qDebug()<<"TIME UP CTIME:"<<Ctime;
             QSound::play("2.wav");
             ui->textEdit->append(TimeToShow+" 点击确认，开始浏览报文！");
             logfile.write(" 点击确认，开始浏览报文！\n");
         }
         else
         {
+            //点击确认已经超时
             QSound::play("3.wav");
             ui->textEdit->setTextColor( QColor( "red" ) );
             ui->textEdit->append(TimeToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
             logfile.write(" 确认超时，请按时浏览报文！\n");
+            Caltimes(UnFinished);
+             //记录超时次数
         }
 //        Ctime=0;
         logfile.close();
@@ -229,8 +236,8 @@ void Widget::LogandShow(int select)
 void Widget::CalTime()
 {
    Ctime++;
-   qDebug()<<"CalTime i am running!!";
-   qDebug()<<"CTIME:"<<Ctime;
+//   qDebug()<<"CalTime i am running!!";
+//   qDebug()<<"CTIME:"<<Ctime;
 }
 /*
  *读取设置

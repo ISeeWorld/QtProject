@@ -52,11 +52,8 @@ public:
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
         Widget->resize(467, 501);
-        Widget->setStyleSheet(QString::fromUtf8("background-color: rgba(170, 255, 255, 80);\n"
-"QPushButton:\n"
-"{\n"
-"color:yellow;\n"
-"}\n"
+        Widget->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 137, 101);\n"
+"\n"
 ""));
         groupBox = new QGroupBox(Widget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
@@ -104,17 +101,20 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         timeEdit1 = new QTimeEdit(layoutWidget);
         timeEdit1->setObjectName(QString::fromUtf8("timeEdit1"));
+        timeEdit1->setFocusPolicy(Qt::ClickFocus);
         timeEdit1->setCalendarPopup(false);
 
         verticalLayout_2->addWidget(timeEdit1);
 
         timeEdit2 = new QTimeEdit(layoutWidget);
         timeEdit2->setObjectName(QString::fromUtf8("timeEdit2"));
+        timeEdit2->setFocusPolicy(Qt::ClickFocus);
 
         verticalLayout_2->addWidget(timeEdit2);
 
         timeEdit3 = new QTimeEdit(layoutWidget);
         timeEdit3->setObjectName(QString::fromUtf8("timeEdit3"));
+        timeEdit3->setFocusPolicy(Qt::ClickFocus);
 
         verticalLayout_2->addWidget(timeEdit3);
 
