@@ -291,3 +291,12 @@ void Widget::Caltimes(int select)
         }
     }
 }
+
+void Widget::on_aboutButton_clicked()
+{
+//    return MessageBox.Show("开发者：温彪", "关于",MessageBoxButtons.OK, MessageBoxIcon.Information);
+//      QMessageBox::about(NULL, "关于", "开发者：温彪 版本V1.0");
+    QMessageBox message(QMessageBox::NoIcon, "关于", "<br>开发者：温彪<br><br><strong>版本V1.0</strong>");
+    message.setIconPixmap(QPixmap("wb.png"));
+    message.exec();
+}

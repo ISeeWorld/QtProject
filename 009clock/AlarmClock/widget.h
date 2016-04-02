@@ -42,6 +42,7 @@ private slots:
     void alarm();
     void CalTime();
 
+    void on_aboutButton_clicked();
 };
 
 #endif // WIDGET_H
