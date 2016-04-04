@@ -8,6 +8,7 @@ long AllFinished;
 long AllUnFinished;
 QTimer *Alarmtimer = new QTimer;
 QTimer *Caltimer = new QTimer;
+QTimer *musicTimer = new QTimer;
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -37,6 +38,7 @@ Widget::Widget(QWidget *parent) :
     //显示时间
     connect(Caltimer, SIGNAL(timeout()), this, SLOT(CalTime()));
     // 注意定时器的槽函数与信号连接问题
+    connect(musicTimer, SIGNAL(timeout()), this, SLOT(PlayMusic()));
     //2016年4月1日11:19:01
     showTime();
     setWindowTitle("后台机报文浏览助手");
@@ -165,28 +167,27 @@ void Widget::LogandShow(int select)
     QFile logfile("log.txt");
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
-//      qDebug()<<"Can't open the file!";
         QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);
     }
-    QTime time = QTime::currentTime();
-    QString TimeToShow = time.toString("hh:mm:ss");
+//    QTime time = QTime::currentTime();
+//    QString TimeToShow = time.toString("hh:mm:ss");
     QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-//    qDebug()<<"TextTimeToShow:"<<TextTimeToShow;
+    QByteArray TextTime = TextTimeToShow.toLatin1();
+    const char *c_str1 = TextTime.data();
+    logfile.write(c_str1);
+//    logfile.close();
     //时间到进行的提示
     if(select == 1)
    {
         //声音提醒
-        QSound::play("1.wav");
-        Sleep(2000);
+//        QSound::play("1.wav");
+//        Sleep(2000);
+        musicTimer->start(1000);
+        //启用定时器报警
         Caltimes(Finished);//计数
         //显示设置
-        ui->textEdit->append(TimeToShow+" 时间到，请浏览报文！");
+        ui->textEdit->append(TextTimeToShow+" 时间到，请浏览报文！");
         //文件浏览
-        QByteArray TextTime = TextTimeToShow.toLatin1();
-        const char *c_str2 = TextTime.data();
-//        qDebug()<<"TextTime:"<<c_str2;
-        logfile.write(c_str2);
-        logfile.close();
         logfile.write(" 时间到，请浏览报文！\n");
         //??????????????????????????
         logfile.close();
@@ -205,7 +206,10 @@ void Widget::LogandShow(int select)
             //点击确认没有超时
 //            qDebug()<<"TIME UP CTIME:"<<Ctime;
             QSound::play("2.wav");
-            ui->textEdit->append(TimeToShow+" 点击确认，开始浏览报文！");
+            //写入字符转
+            ui->textEdit->append(TextTimeToShow+" 点击确认，开始浏览报文！");
+//            logfile.write(c_str1);
+//            logfile.close();
             logfile.write(" 点击确认，开始浏览报文！\n");
         }
         else
@@ -213,20 +217,25 @@ void Widget::LogandShow(int select)
             //点击确认已经超时
             QSound::play("3.wav");
             ui->textEdit->setTextColor( QColor( "red" ) );
-            ui->textEdit->append(TimeToShow+" 确认超时，请按时浏览报文！");
+            ui->textEdit->append(TextTimeToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
+//            logfile.write(c_str1);
+//            logfile.close();
             logfile.write(" 确认超时，请按时浏览报文！\n");
             Caltimes(UnFinished);
+
              //记录超时次数
         }
-//        Ctime=0;
-        logfile.close();
+
+        WriteSettings();
+//        logfile.close();
    }
 
     else
-   {
-        ui->textEdit->append("点击退出，没有浏览报文！");
-   }
+    {
+
+    }
+     logfile.close();
 
 }
 /*
@@ -296,7 +305,18 @@ void Widget::on_aboutButton_clicked()
 {
 //    return MessageBox.Show("开发者：温彪", "关于",MessageBoxButtons.OK, MessageBoxIcon.Information);
 //      QMessageBox::about(NULL, "关于", "开发者：温彪 版本V1.0");
-    QMessageBox message(QMessageBox::NoIcon, "关于", "<br>开发者：温彪<br><br><strong>版本V1.0</strong>");
+    QMessageBox message(QMessageBox::NoIcon, "关于", "<br><strong>开发者：温彪</strong><br><br><strong>版本V1.0</strong>");
     message.setIconPixmap(QPixmap("wb.png"));
     message.exec();
+}
+/*
+ *使用定时器播放声音
+ *2016年4月4日22:45:37
+ */
+void Widget::PlayMusic()
+{
+
+    QSound::play("1.wav");
+    musicTimer->stop();
+
 }

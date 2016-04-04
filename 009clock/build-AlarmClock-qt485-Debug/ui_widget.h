@@ -46,6 +46,7 @@ public:
     QPushButton *quitButton;
     QGroupBox *groupBox_3;
     QTextEdit *textEdit;
+    QPushButton *aboutButton;
 
     void setupUi(QWidget *Widget)
     {
@@ -147,6 +148,10 @@ public:
 ""));
         textEdit->setReadOnly(true);
         textEdit->setTabStopWidth(82);
+        aboutButton = new QPushButton(Widget);
+        aboutButton->setObjectName(QString::fromUtf8("aboutButton"));
+        aboutButton->setGeometry(QRect(210, 449, 41, 31));
+        aboutButton->setFlat(true);
 
         retranslateUi(Widget);
         QObject::connect(quitButton, SIGNAL(clicked()), Widget, SLOT(close()));
@@ -158,14 +163,33 @@ public:
     void retranslateUi(QWidget *Widget)
     {
         Widget->setWindowTitle(QApplication::translate("Widget", "Widget", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        groupBox->setToolTip(QApplication::translate("Widget", "\345\275\223\345\211\215\346\227\266\351\227\264", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
         groupBox->setTitle(QApplication::translate("Widget", "\345\275\223\345\211\215\346\227\266\351\227\264", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_WHATSTHIS
+        lcdNumber->setWhatsThis(QApplication::translate("Widget", "\345\275\223\345\211\215\346\227\266\351\227\264", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_WHATSTHIS
+#ifndef QT_NO_TOOLTIP
+        groupBox_2->setToolTip(QApplication::translate("Widget", "\346\217\220\351\206\222\346\227\266\351\227\264\350\256\276\347\275\256\346\241\206", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_WHATSTHIS
+        groupBox_2->setWhatsThis(QString());
+#endif // QT_NO_WHATSTHIS
         groupBox_2->setTitle(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\346\217\220\351\206\222\346\227\266\351\227\264\350\256\276\347\275\256", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("Widget", "\347\254\254\344\270\200\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("Widget", "\347\254\254\344\272\214\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Widget", "\347\254\254\344\270\211\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         hideButton->setText(QApplication::translate("Widget", "\346\234\200\345\260\217\345\214\226", 0, QApplication::UnicodeUTF8));
         quitButton->setText(QApplication::translate("Widget", "\351\200\200\345\207\272", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        groupBox_3->setToolTip(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_WHATSTHIS
+        groupBox_3->setWhatsThis(QString());
+#endif // QT_NO_WHATSTHIS
         groupBox_3->setTitle(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\345\256\214\346\210\220\346\203\205\345\206\265", 0, QApplication::UnicodeUTF8));
+        aboutButton->setText(QString());
     } // retranslateUi
 
 };

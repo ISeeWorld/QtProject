@@ -41,6 +41,7 @@ private slots:
     void showTime();
     void alarm();
     void CalTime();
+    void PlayMusic();
 
     void on_aboutButton_clicked();
 };
