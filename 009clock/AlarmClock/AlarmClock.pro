@@ -13,9 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        widget.cpp
+        widget.cpp \
+    logindialog.cpp
 
-HEADERS  += widget.h
+HEADERS  += widget.h \
+    logindialog.h
 
-FORMS    += widget.ui
+FORMS    += widget.ui \
+    logindialog.ui
 RC_FILE +=ico.rc

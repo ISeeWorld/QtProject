@@ -1,6 +1,8 @@
 #include "widget.h"
+#include "logindialog.h"
 #include <QApplication>
 #include <QSplashScreen>
+
 
 
 int main(int argc, char *argv[])
@@ -14,8 +16,15 @@ int main(int argc, char *argv[])
     app.processEvents();
     Sleep(3000);
     Widget w;
-    w.show();
+    LoginDialog dlg;
     splash.finish(&w);
-
-    return app.exec();
+    if(dlg.exec()==QDialog::Accepted)
+    {
+       w.show();
+       return app.exec();
+    }
+    else
+    {
+        return 0;
+    }
 }
