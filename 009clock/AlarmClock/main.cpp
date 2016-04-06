@@ -2,11 +2,15 @@
 #include "logindialog.h"
 #include <QApplication>
 #include <QSplashScreen>
+#include <QString>
+
 
 
 
 int main(int argc, char *argv[])
 {
+//    QString UserLogin;
+//    QString TimeInput;
     QApplication app(argc, argv);
 
     QPixmap pixmap("1.png");
@@ -20,6 +24,10 @@ int main(int argc, char *argv[])
     splash.finish(&w);
     if(dlg.exec()==QDialog::Accepted)
     {
+       w.UserLogin=dlg.CurrentUser;
+       w.TimeInput=dlg.WorkTime;
+       qDebug()<<"UserLogin:"<<w.UserLogin;
+       qDebug()<<"TimeInput:"<<w.TimeInput;
        w.show();
        return app.exec();
     }

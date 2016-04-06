@@ -41,7 +41,8 @@ Widget::Widget(QWidget *parent) :
     connect(musicTimer, SIGNAL(timeout()), this, SLOT(PlayMusic()));
     //2016年4月1日11:19:01
     showTime();
-    setWindowTitle("后台机报文浏览助手");
+    setWindowTitle(tr("后台机报文浏览助手"));
+    setFixedSize(470,514);
     //初始化文字显示颜色
     ui->textEdit->setTextColor( QColor( "blue" ) );
 
@@ -171,7 +172,7 @@ void Widget::LogandShow(int select)
     }
 //    QTime time = QTime::currentTime();
 //    QString TimeToShow = time.toString("hh:mm:ss");
-    QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+tr(" 监盘人:")+UserLogin+" ";
     QByteArray TextTime = TextTimeToShow.toLatin1();
     const char *c_str1 = TextTime.data();
     logfile.write(c_str1);

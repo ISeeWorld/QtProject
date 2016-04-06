@@ -31,6 +31,9 @@ public:
     void ReadSettings();
     void WriteSettings();
     void Caltimes(int select);
+    QString UserLogin;
+    QString TimeInput;
+
 
     ~Widget();
     

@@ -52,7 +52,7 @@ public:
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
-        Widget->resize(467, 501);
+        Widget->resize(470, 514);
         Widget->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 137, 101);\n"
 "\n"
 ""));
