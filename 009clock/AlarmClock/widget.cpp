@@ -3,12 +3,15 @@
 
 
 int TimeUpFlag=1;
+int LoginFlag=1;
+long WorkTimeCal;
 long CsTimeConfig;
 long AllFinished;
 long AllUnFinished;
 QTimer *Alarmtimer = new QTimer;
 QTimer *Caltimer = new QTimer;
 QTimer *musicTimer = new QTimer;
+QTimer *workTimer = new QTimer;
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -40,6 +43,7 @@ Widget::Widget(QWidget *parent) :
     // 注意定时器的槽函数与信号连接问题
     connect(musicTimer, SIGNAL(timeout()), this, SLOT(PlayMusic()));
     //2016年4月1日11:19:01
+    connect(workTimer, SIGNAL(timeout()), this, SLOT(WorkTime()));
     showTime();
     setWindowTitle(tr("后台机报文浏览助手"));
     setFixedSize(470,514);
@@ -59,7 +63,6 @@ Widget::~Widget()
 void Widget::showTime()
 //! [1] //! [2]
 {
-
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
     if ((time.second() % 2) == 0)
@@ -83,6 +86,13 @@ void Widget::alarm()
 {
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
+    if(LoginFlag == 1)
+    {
+      QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" "+"当前监盘者："+UserLogin+" 用户登录成功，监盘时长:"+QString::number(TimeInput)+"小时";
+      ui->textEdit->append(TextTimeToShow);
+      LoginFlag=LoginFlag-1;
+      workTimer->start(500);
+    }
 //    AllFinished++;
 //    AllUnFinished++;
 ////    CsTimeConfig++;
@@ -165,6 +175,8 @@ void Widget::TimeAlarmInit()
 
 void Widget::LogandShow(int select)
 {
+//    qDebug()<<"LogandShowUserLogin:"<<UserLogin;
+//    qDebug()<<"LogandShowTimeInput:"<<TimeInput;
     QFile logfile("log.txt");
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
@@ -172,11 +184,14 @@ void Widget::LogandShow(int select)
     }
 //    QTime time = QTime::currentTime();
 //    QString TimeToShow = time.toString("hh:mm:ss");
-    QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+tr(" 监盘人:")+UserLogin+" ";
-    QByteArray TextTime = TextTimeToShow.toLatin1();
-    const char *c_str1 = TextTime.data();
-    logfile.write(c_str1);
-//    logfile.close();
+      QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" ";
+      QString UiToShow=TextTimeToShow+"当前监盘人:"+UserLogin+"";
+      //    QByteArray TextTime = TextTimeToShow.toLatin1();
+//    const char *c_str1 = TextTime.data();
+//    logfile.write(c_str1);
+      QTextStream out(&logfile);
+      out <<TextTimeToShow<<QString::fromStdString(" 当前监盘人: ")<<UserLogin;
+
     //时间到进行的提示
     if(select == 1)
    {
@@ -187,9 +202,10 @@ void Widget::LogandShow(int select)
         //启用定时器报警
         Caltimes(Finished);//计数
         //显示设置
-        ui->textEdit->append(TextTimeToShow+" 时间到，请浏览报文！");
+        ui->textEdit->append(UiToShow+" 时间到，请浏览报文！");
         //文件浏览
-        logfile.write(" 时间到，请浏览报文！\n");
+//        logfile.write(" 时间到，请浏览报文！\n");
+        out<<QString::fromStdString(" 时间到，请浏览报文！\n");
         //??????????????????????????
         logfile.close();
        //初始化超时设置  启动超时定时器
@@ -208,21 +224,23 @@ void Widget::LogandShow(int select)
 //            qDebug()<<"TIME UP CTIME:"<<Ctime;
             QSound::play("2.wav");
             //写入字符转
-            ui->textEdit->append(TextTimeToShow+" 点击确认，开始浏览报文！");
+            ui->textEdit->append(UiToShow+" 点击确认，开始浏览报文！");
 //            logfile.write(c_str1);
 //            logfile.close();
-            logfile.write(" 点击确认，开始浏览报文！\n");
+//            logfile.write(" 点击确认，开始浏览报文！\n");
+            out<<QString::fromStdString(" 点击确认，开始浏览报文！\n");
         }
         else
         {
             //点击确认已经超时
             QSound::play("3.wav");
             ui->textEdit->setTextColor( QColor( "red" ) );
-            ui->textEdit->append(TextTimeToShow+" 确认超时，请按时浏览报文！");
+            ui->textEdit->append(UiToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
 //            logfile.write(c_str1);
 //            logfile.close();
-            logfile.write(" 确认超时，请按时浏览报文！\n");
+//            logfile.write(" 确认超时，请按时浏览报文！\n");
+            out<<QString::fromStdString(" 确认超时，请按时浏览报文！\n");
             Caltimes(UnFinished);
 
              //记录超时次数
@@ -319,5 +337,25 @@ void Widget::PlayMusic()
 
     QSound::play("1.wav");
     musicTimer->stop();
+
+}
+void Widget::WorkTime()
+{
+        if(WorkTimeCal==1)
+    {
+         QSound::play("4.wav");
+    }
+
+        WorkTimeCal++;
+
+        if(WorkTimeCal>=TimeInput*5)
+    {
+        workTimer->stop();
+        Sleep(1000);
+        QSound::play("5.wav");
+        Sleep(8000);
+        Widget::destroy();
+
+    }
 
 }

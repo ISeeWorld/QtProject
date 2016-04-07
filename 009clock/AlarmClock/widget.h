@@ -32,7 +32,7 @@ public:
     void WriteSettings();
     void Caltimes(int select);
     QString UserLogin;
-    QString TimeInput;
+    int TimeInput;
 
 
     ~Widget();
@@ -45,6 +45,7 @@ private slots:
     void alarm();
     void CalTime();
     void PlayMusic();
+    void WorkTime();
 
     void on_aboutButton_clicked();
 };

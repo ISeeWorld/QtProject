@@ -26,6 +26,8 @@ LoginDialog::~LoginDialog()
  */
 void LoginDialog::on_LoginButton_clicked()
 {
+    int hours[5]={6,8,12,18,24};
+    int index;
     if(ui->UsertextEdit->toPlainText().isEmpty()||ui->PwdtextEdit->toPlainText().isEmpty())
     {
         QMessageBox::information(this,tr("请输入用户名或密码"),tr("请先输入再登录"),QMessageBox::Ok);
@@ -33,13 +35,16 @@ void LoginDialog::on_LoginButton_clicked()
     }
     else
     {
-        if((ui->UsertextEdit->toPlainText()=="test")&&(ui->PwdtextEdit->toPlainText()=="123"))
+        if((ui->UsertextEdit->toPlainText().trimmed()=="温彪")&&(ui->PwdtextEdit->toPlainText()=="123"))
         {
             QDialog::accept();
             CurrentUser=ui->UsertextEdit->toPlainText();
-            WorkTime=ui->TimecomboBox->currentIndex();
+            index=ui->TimecomboBox->currentIndex();
+            WorkTime=hours[index];
+            qDebug()<<"index of TimecomboBox:"<<ui->TimecomboBox->currentIndex();
             qDebug()<<"WorkTime:"<<WorkTime;
             qDebug()<<"CurrentUser:"<<CurrentUser;
+            loginLog(CurrentUser);
         }
         else
         {
@@ -49,4 +54,23 @@ void LoginDialog::on_LoginButton_clicked()
             ui->UsertextEdit->setFocus();
         }
     }
+}
+/*
+ *记录用户登录时间
+ *2016年4月7日16:56:34
+ */
+
+void LoginDialog::loginLog(QString user)
+{
+    QFile logfile("log.txt");
+    if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
+    {
+        QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+
+    QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" ";
+    QTextStream out(&logfile);
+    out <<TextTimeToShow<<QString::fromStdString(" 当前监盘人: ")<<user<<QString::fromStdString(" 用户登录成功！\n") ;
+    logfile.close();
+
 }

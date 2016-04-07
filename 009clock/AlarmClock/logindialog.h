@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QTextCodec>
+#include <QFile>
+#include <QDateTime>
 
 namespace Ui {
 class LoginDialog;
@@ -17,7 +19,8 @@ class LoginDialog : public QDialog
 public:
     explicit LoginDialog(QWidget *parent = 0);
     QString CurrentUser;
-    QString WorkTime;
+    int WorkTime;
+    void loginLog(QString user);
 
     ~LoginDialog();
     
