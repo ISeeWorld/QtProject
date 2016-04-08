@@ -17,6 +17,7 @@
 #include <QtGui/QDialog>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QTextEdit>
 
@@ -29,11 +30,11 @@ public:
     QLabel *label_2;
     QLabel *label_3;
     QTextEdit *UsertextEdit;
-    QTextEdit *PwdtextEdit;
     QLabel *label_4;
     QComboBox *TimecomboBox;
     QPushButton *LoginButton;
     QPushButton *quitButton;
+    QLineEdit *PwdlineEdit;
 
     void setupUi(QDialog *LoginDialog)
     {
@@ -43,7 +44,8 @@ public:
         LoginDialog->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 137, 101);"));
         label = new QLabel(LoginDialog);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(110, 30, 201, 41));
+        label->setGeometry(QRect(70, 30, 261, 51));
+        label->setStyleSheet(QString::fromUtf8("font: 75 10pt \"\345\256\213\344\275\223\";"));
         label_2 = new QLabel(LoginDialog);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(80, 110, 72, 15));
@@ -54,10 +56,6 @@ public:
         UsertextEdit->setObjectName(QString::fromUtf8("UsertextEdit"));
         UsertextEdit->setGeometry(QRect(160, 100, 121, 31));
         UsertextEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
-        PwdtextEdit = new QTextEdit(LoginDialog);
-        PwdtextEdit->setObjectName(QString::fromUtf8("PwdtextEdit"));
-        PwdtextEdit->setGeometry(QRect(160, 150, 121, 31));
-        PwdtextEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         label_4 = new QLabel(LoginDialog);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(80, 210, 72, 15));
@@ -70,6 +68,10 @@ public:
         quitButton = new QPushButton(LoginDialog);
         quitButton->setObjectName(QString::fromUtf8("quitButton"));
         quitButton->setGeometry(QRect(250, 250, 93, 28));
+        PwdlineEdit = new QLineEdit(LoginDialog);
+        PwdlineEdit->setObjectName(QString::fromUtf8("PwdlineEdit"));
+        PwdlineEdit->setGeometry(QRect(160, 150, 121, 31));
+        PwdlineEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
 
         retranslateUi(LoginDialog);
         QObject::connect(quitButton, SIGNAL(clicked()), LoginDialog, SLOT(close()));
@@ -80,7 +82,7 @@ public:
     void retranslateUi(QDialog *LoginDialog)
     {
         LoginDialog->setWindowTitle(QApplication::translate("LoginDialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("LoginDialog", "\346\254\242\350\277\216\347\231\273\351\231\206\345\220\216\345\217\260\346\234\272\346\212\245\346\226\207\345\212\251\346\211\213\347\263\273\347\273\237", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("LoginDialog", "\346\254\242\350\277\216\347\231\273\351\231\206\345\220\216\345\217\260\346\234\272\346\212\245\346\226\207\346\265\217\350\247\210\345\212\251\346\211\213\347\263\273\347\273\237", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("LoginDialog", "\347\224\250\346\210\267\345\220\215", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("LoginDialog", "\345\257\206\347\240\201", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("LoginDialog", "\347\233\221\347\233\230\346\227\266\351\225\277", 0, QApplication::UnicodeUTF8));

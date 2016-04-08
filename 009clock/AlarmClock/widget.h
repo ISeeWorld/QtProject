@@ -11,11 +11,13 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QFile>
+#include <QProcess>
 
 #define  TimeUP 1
 #define  AfterClick 2
 #define  Finished 1
 #define  UnFinished 2
+#define  TimeDelayClose  16
 
 namespace Ui {
 class Widget;

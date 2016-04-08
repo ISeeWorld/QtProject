@@ -250,9 +250,16 @@ void Widget::LogandShow(int select)
 //        logfile.close();
    }
 
+    else if(select == 3)
+    {
+        QSound::play("5.wav");
+        ui->textEdit->setTextColor( QColor( "red" ) );
+        ui->textEdit->append(UiToShow+" 时间到，当前用户即将注销，请准备重新登录！");
+        ui->textEdit->setTextColor( QColor( "blue" ) );
+        out<<QString::fromStdString(" 时间到，当前用户即将注销，请准备重新登录！\n\n");
+    }
     else
     {
-
     }
      logfile.close();
 
@@ -322,8 +329,6 @@ void Widget::Caltimes(int select)
 
 void Widget::on_aboutButton_clicked()
 {
-//    return MessageBox.Show("开发者：温彪", "关于",MessageBoxButtons.OK, MessageBoxIcon.Information);
-//      QMessageBox::about(NULL, "关于", "开发者：温彪 版本V1.0");
     QMessageBox message(QMessageBox::NoIcon, "关于", "<br><strong>开发者：温彪</strong><br><br><strong>版本V1.0</strong>");
     message.setIconPixmap(QPixmap("wb.png"));
     message.exec();
@@ -348,14 +353,22 @@ void Widget::WorkTime()
 
         WorkTimeCal++;
 
-        if(WorkTimeCal>=TimeInput*5)
+        if(WorkTimeCal==(TimeInput*5-TimeDelayClose))
     {
         workTimer->stop();
-        Sleep(1000);
-        QSound::play("5.wav");
-        Sleep(8000);
-        Widget::destroy();
+        LogandShow(3);
+        workTimer->start(500);
+        //重新启动定时器实现延时关闭，保证显示和记录正确
 
+    }
+        //实现延时关闭
+        if(WorkTimeCal==TimeInput*5)
+    {
+         workTimer->stop();
+         this->close();
+          //自动退出程序
+//         QProcess::startDetached(qApp->applicationFilePath());
+         QProcess::startDetached(qApp->applicationFilePath(), QStringList());
     }
 
 }

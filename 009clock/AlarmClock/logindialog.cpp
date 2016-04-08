@@ -14,6 +14,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     setFixedSize(400,300);
     setWindowTitle(tr("登录"));
     ui->LoginButton->setDefault(true);
+    ui->PwdlineEdit->setEchoMode( QLineEdit::Password );
 }
 
 LoginDialog::~LoginDialog()
@@ -28,14 +29,14 @@ void LoginDialog::on_LoginButton_clicked()
 {
     int hours[5]={6,8,12,18,24};
     int index;
-    if(ui->UsertextEdit->toPlainText().isEmpty()||ui->PwdtextEdit->toPlainText().isEmpty())
+    if(ui->UsertextEdit->toPlainText().isEmpty()||ui->PwdlineEdit->text().isEmpty())
     {
         QMessageBox::information(this,tr("请输入用户名或密码"),tr("请先输入再登录"),QMessageBox::Ok);
         ui->UsertextEdit->setFocus();
     }
     else
     {
-        if((ui->UsertextEdit->toPlainText().trimmed()=="温彪")&&(ui->PwdtextEdit->toPlainText()=="123"))
+        if((ui->UsertextEdit->toPlainText().trimmed()=="温彪")&&(ui->PwdlineEdit->text()=="123"))
         {
             QDialog::accept();
             CurrentUser=ui->UsertextEdit->toPlainText();
@@ -50,7 +51,7 @@ void LoginDialog::on_LoginButton_clicked()
         {
             QMessageBox::warning(this,tr("登录失败"),tr("请输入正确的账号下面再进行登录！"),QMessageBox::Ok);
             ui->UsertextEdit->clear();
-            ui->PwdtextEdit->clear();
+            ui->PwdlineEdit->clear();
             ui->UsertextEdit->setFocus();
         }
     }

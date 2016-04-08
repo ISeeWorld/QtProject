@@ -17,6 +17,7 @@
 #include <QtGui/QDialog>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QTextEdit>
 
@@ -29,11 +30,11 @@ public:
     QLabel *label_2;
     QLabel *label_3;
     QTextEdit *UsertextEdit;
-    QTextEdit *PwdtextEdit;
     QLabel *label_4;
     QComboBox *TimecomboBox;
     QPushButton *LoginButton;
     QPushButton *quitButton;
+    QLineEdit *PwdlineEdit;
 
     void setupUi(QDialog *LoginDialog)
     {
@@ -54,10 +55,6 @@ public:
         UsertextEdit->setObjectName(QString::fromUtf8("UsertextEdit"));
         UsertextEdit->setGeometry(QRect(160, 100, 121, 31));
         UsertextEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
-        PwdtextEdit = new QTextEdit(LoginDialog);
-        PwdtextEdit->setObjectName(QString::fromUtf8("PwdtextEdit"));
-        PwdtextEdit->setGeometry(QRect(160, 150, 121, 31));
-        PwdtextEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         label_4 = new QLabel(LoginDialog);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(80, 210, 72, 15));
@@ -70,6 +67,10 @@ public:
         quitButton = new QPushButton(LoginDialog);
         quitButton->setObjectName(QString::fromUtf8("quitButton"));
         quitButton->setGeometry(QRect(250, 250, 93, 28));
+        PwdlineEdit = new QLineEdit(LoginDialog);
+        PwdlineEdit->setObjectName(QString::fromUtf8("PwdlineEdit"));
+        PwdlineEdit->setGeometry(QRect(160, 150, 121, 31));
+        PwdlineEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
 
         retranslateUi(LoginDialog);
         QObject::connect(quitButton, SIGNAL(clicked()), LoginDialog, SLOT(close()));
