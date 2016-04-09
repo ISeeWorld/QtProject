@@ -36,7 +36,7 @@ void LoginDialog::on_LoginButton_clicked()
     }
     else
     {
-        if((ui->UsertextEdit->toPlainText().trimmed()=="温彪")&&(ui->PwdlineEdit->text()=="123"))
+        if((ui->UsertextEdit->toPlainText().trimmed().length()<=5)&&(ui->PwdlineEdit->text()=="123"))
         {
             QDialog::accept();
             CurrentUser=ui->UsertextEdit->toPlainText();

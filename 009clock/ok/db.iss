@@ -37,8 +37,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "D:\QT\MyProject\009clock\ok\AlarmClock.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\1.png"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\1.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\QT\MyProject\009clock\ok\3.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\2.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\QT\MyProject\009clock\ok\3.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\QT\MyProject\009clock\ok\4.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\QT\MyProject\009clock\ok\5.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\config.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\log.txt"; DestDir: "{app}"; Flags: ignoreversion
