@@ -49,6 +49,7 @@ Widget::Widget(QWidget *parent) :
     setFixedSize(470,514);
     //初始化文字显示颜色
     ui->textEdit->setTextColor( QColor( "blue" ) );
+    FileName=QString::fromStdString("Log_")+QDateTime::currentDateTime().toString("MM")+QString::fromStdString(".txt");
 
 }
 
@@ -177,7 +178,7 @@ void Widget::LogandShow(int select)
 {
 //    qDebug()<<"LogandShowUserLogin:"<<UserLogin;
 //    qDebug()<<"LogandShowTimeInput:"<<TimeInput;
-    QFile logfile("log.txt");
+    QFile logfile(FileName);
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
         QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);
@@ -185,6 +186,7 @@ void Widget::LogandShow(int select)
 //    QTime time = QTime::currentTime();
 //    QString TimeToShow = time.toString("hh:mm:ss");
       QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" ";
+      qDebug()<<"month"<<QDateTime::currentDateTime().toString("MM");
       QString UiToShow=TextTimeToShow+"当前监盘人:"+UserLogin+"";
       //    QByteArray TextTime = TextTimeToShow.toLatin1();
 //    const char *c_str1 = TextTime.data();
@@ -257,6 +259,12 @@ void Widget::LogandShow(int select)
         ui->textEdit->append(UiToShow+" 时间到，当前用户即将注销，请准备重新登录！");
         ui->textEdit->setTextColor( QColor( "blue" ) );
         out<<QString::fromStdString(" 时间到，当前用户即将注销，请准备重新登录！\n\n");
+    }
+    else if(select == 4)
+    {
+        QSound::play("6.wav");
+        ui->textEdit->append(UiToShow+" 我已经认真浏览后台机报文！");
+        out<<QString::fromStdString(" 我已经认真浏览后台机报文！！\n");
     }
     else
     {
@@ -371,4 +379,9 @@ void Widget::WorkTime()
          QProcess::startDetached(qApp->applicationFilePath(), QStringList());
     }
 
+}
+
+void Widget::on_LogButton_clicked()
+{
+    LogandShow(4);
 }

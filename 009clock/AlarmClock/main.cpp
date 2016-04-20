@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
 {
 //    QString UserLogin;
 //    QString TimeInput;
-    QApplication app(argc, argv);
 
+    QApplication app(argc, argv);
     QPixmap pixmap("1.png");
     QSplashScreen splash(pixmap);
     splash.resize(pixmap.size());
@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 
     LoginDialog dlg;
     splash.finish(&dlg);
+
     //控制权的交接 需要考虑
     if(dlg.exec()==QDialog::Accepted)
     {

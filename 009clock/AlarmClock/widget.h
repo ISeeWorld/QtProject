@@ -34,6 +34,7 @@ public:
     void WriteSettings();
     void Caltimes(int select);
     QString UserLogin;
+    QString FileName;
     int TimeInput;
 
 
@@ -50,6 +51,7 @@ private slots:
     void WorkTime();
 
     void on_aboutButton_clicked();
+    void on_LogButton_clicked();
 };
 
 #endif // WIDGET_H

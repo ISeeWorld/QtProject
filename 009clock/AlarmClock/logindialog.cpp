@@ -11,10 +11,12 @@ LoginDialog::LoginDialog(QWidget *parent) :
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
+    QSound::play("7.wav");
     setFixedSize(400,300);
     setWindowTitle(tr("登录"));
     ui->LoginButton->setDefault(true);
     ui->PwdlineEdit->setEchoMode( QLineEdit::Password );
+    FileName=QString::fromStdString("Log_")+QDateTime::currentDateTime().toString("MM")+QString::fromStdString(".txt");
 }
 
 LoginDialog::~LoginDialog()
@@ -63,7 +65,7 @@ void LoginDialog::on_LoginButton_clicked()
 
 void LoginDialog::loginLog(QString user)
 {
-    QFile logfile("log.txt");
+    QFile logfile(FileName);
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
         QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);

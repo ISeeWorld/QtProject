@@ -42,7 +42,7 @@ public:
     QTimeEdit *timeEdit1;
     QTimeEdit *timeEdit2;
     QTimeEdit *timeEdit3;
-    QPushButton *hideButton;
+    QPushButton *LogButton;
     QPushButton *quitButton;
     QGroupBox *groupBox_3;
     QTextEdit *textEdit;
@@ -122,14 +122,14 @@ public:
 
         horizontalLayout->addLayout(verticalLayout_2);
 
-        hideButton = new QPushButton(Widget);
-        hideButton->setObjectName(QString::fromUtf8("hideButton"));
-        hideButton->setEnabled(true);
-        hideButton->setGeometry(QRect(60, 450, 93, 28));
-        hideButton->setStyleSheet(QString::fromUtf8(""));
-        hideButton->setAutoDefault(false);
-        hideButton->setDefault(false);
-        hideButton->setFlat(false);
+        LogButton = new QPushButton(Widget);
+        LogButton->setObjectName(QString::fromUtf8("LogButton"));
+        LogButton->setEnabled(true);
+        LogButton->setGeometry(QRect(60, 450, 93, 28));
+        LogButton->setStyleSheet(QString::fromUtf8(""));
+        LogButton->setAutoDefault(false);
+        LogButton->setDefault(false);
+        LogButton->setFlat(false);
         quitButton = new QPushButton(Widget);
         quitButton->setObjectName(QString::fromUtf8("quitButton"));
         quitButton->setGeometry(QRect(300, 450, 93, 28));
@@ -155,7 +155,6 @@ public:
 
         retranslateUi(Widget);
         QObject::connect(quitButton, SIGNAL(clicked()), Widget, SLOT(close()));
-        QObject::connect(hideButton, SIGNAL(clicked()), Widget, SLOT(showMinimized()));
 
         QMetaObject::connectSlotsByName(Widget);
     } // setupUi
@@ -180,7 +179,7 @@ public:
         label_3->setText(QApplication::translate("Widget", "\347\254\254\344\270\200\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("Widget", "\347\254\254\344\272\214\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Widget", "\347\254\254\344\270\211\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
-        hideButton->setText(QApplication::translate("Widget", "\346\234\200\345\260\217\345\214\226", 0, QApplication::UnicodeUTF8));
+        LogButton->setText(QApplication::translate("Widget", "\346\212\245\346\226\207\345\267\262\346\265\217\350\247\210", 0, QApplication::UnicodeUTF8));
         quitButton->setText(QApplication::translate("Widget", "\351\200\200\345\207\272", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         groupBox_3->setToolTip(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
