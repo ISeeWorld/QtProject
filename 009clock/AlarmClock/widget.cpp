@@ -8,6 +8,8 @@ long WorkTimeCal;
 long CsTimeConfig;
 long AllFinished;
 long AllUnFinished;
+int AlarmOne=1,AlarmTwo=1,AlarmThree=1;
+
 QTimer *Alarmtimer = new QTimer;
 QTimer *Caltimer = new QTimer;
 QTimer *musicTimer = new QTimer;
@@ -85,6 +87,10 @@ void Widget::showTime()
  */
 void Widget::alarm()
 {
+    /*
+     *2016年4月24日10:41:46
+     *第一次登陆需要启动
+     */
     QTime time = QTime::currentTime();
     QString text = time.toString("hh:mm:ss");
     if(LoginFlag == 1)
@@ -94,6 +100,7 @@ void Widget::alarm()
       LoginFlag=LoginFlag-1;
       workTimer->start(500);
     }
+
 //    AllFinished++;
 //    AllUnFinished++;
 ////    CsTimeConfig++;
@@ -105,18 +112,38 @@ void Widget::alarm()
     int a1h=time.hour()==ui->timeEdit1->time().hour();
     int a1m=time.minute()==ui->timeEdit1->time().minute();
     int a1s=time.second()==ui->timeEdit1->time().second();
-    int a1flag=a1h&&a1m&&a1s;
+    int a1flag=a1h&&a1m&&a1s&&AlarmOne;
 
+//    if((a1h&&a1m&&a1s) == 1)
+//    {
+//        AlarmOne=1;
+//        qDebug()<<"if AlarmOne:"<<AlarmOne;
+//    }
+
+//    qDebug()<<"a1flag:"<<a1flag;
+//    qDebug()<<"AlarmOne:"<<AlarmOne;
     int a2h=time.hour()==ui->timeEdit2->time().hour();
     int a2m=time.minute()==ui->timeEdit2->time().minute();
     int a2s=time.second()==ui->timeEdit2->time().second();
-    int a2flag=a2h&&a2m&&a2s;
-
+    int a2flag=a2h&&a2m&&a2s&&AlarmTwo;
+//    if(a2h&&a2m&&a2s == 1)
+//    {
+//        AlarmTwo=1;
+//        qDebug()<<"if AlarmTwo:"<<AlarmTwo;
+//    }
+//    qDebug()<<"a2flag:"<<a2flag;
+//    qDebug()<<"AlarmTwo:"<<AlarmTwo;
     int a3h=time.hour()==ui->timeEdit3->time().hour();
     int a3m=time.minute()==ui->timeEdit3->time().minute();
     int a3s=time.second()==ui->timeEdit3->time().second();
-    int a3flag=a3h&&a3m&&a3s;
-
+    int a3flag=a3h&&a3m&&a3s&&AlarmThree;
+//    if(a3h&&a3m&&a3s == 1)
+//    {
+//        AlarmThree=1;
+//        qDebug()<<"if AlarmThree:"<<AlarmThree;
+//    }
+//    qDebug()<<"a3flag:"<<a3flag;
+//    qDebug()<<"AlarmThree:"<<AlarmThree;
     if((a1flag||a2flag||a3flag)&&TimeUpFlag)
     {
        TimeUpFlag=0;
@@ -178,6 +205,7 @@ void Widget::LogandShow(int select)
 {
 //    qDebug()<<"LogandShowUserLogin:"<<UserLogin;
 //    qDebug()<<"LogandShowTimeInput:"<<TimeInput;
+    ui->textEdit->setTextColor( QColor( "blue" ) );
     QFile logfile(FileName);
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
@@ -259,15 +287,52 @@ void Widget::LogandShow(int select)
         ui->textEdit->append(UiToShow+" 时间到，当前用户即将注销，请准备重新登录！");
         ui->textEdit->setTextColor( QColor( "blue" ) );
         out<<QString::fromStdString(" 时间到，当前用户即将注销，请准备重新登录！\n\n");
+
     }
     else if(select == 4)
     {
         QSound::play("6.wav");
         ui->textEdit->append(UiToShow+" 我已经认真浏览后台机报文！");
         out<<QString::fromStdString(" 我已经认真浏览后台机报文！！\n");
+        QTime Currenttime = QTime::currentTime();
+        QTime UItime1=ui->timeEdit1->time();
+        QTime UItime2=ui->timeEdit2->time();
+        QTime UItime3=ui->timeEdit3->time();
+//        qDebug()<<"TIME1--:"<<Currenttime.msecsTo(UItime1)/60000;
+//        qDebug()<<"TIME2--:"<<Currenttime.msecsTo(UItime2)/60000;
+//        qDebug()<<"TIME3--:"<<Currenttime.msecsTo(UItime3)/60000;
+        if((Currenttime.msecsTo(UItime1)/60000<=AlarmCancel)&&(Currenttime.msecsTo(UItime1)/60000>0))
+        {
+            AlarmOne=0;
+            ui->textEdit->append(UiToShow+" 提前浏览后台机报文，第一次提醒事件取消！");
+            out<<QString::fromStdString("                     提前浏览后台机报文，第一次提醒事件取消！\n");
+
+        }
+
+        if((Currenttime.msecsTo(UItime2)/60000<=AlarmCancel)&&(Currenttime.msecsTo(UItime2)/60000>0))
+        {
+            AlarmTwo=0;
+            ui->textEdit->append(UiToShow+" 提前浏览后台机报文，第二次提醒事件取消！");
+            out<<QString::fromStdString("                     提前浏览后台机报文，第二次提醒事件取消！！\n");
+
+        }
+
+        if((Currenttime.msecsTo(UItime3)/60000<=AlarmCancel)&&(Currenttime.msecsTo(UItime3)/60000>0))
+        {
+            AlarmThree=0;
+            qDebug()<<"if AlarmThree:"<<AlarmThree;
+            ui->textEdit->append(UiToShow+" 提前浏览后台机报文，第三次提醒事件取消！");
+            out<<QString::fromStdString("                     提前浏览后台机报文，第三次提醒事件取消！！\n");
+        }
+
+        /*
+         *如果手工自动提前查看报文，则对应报警时间内的报警提醒取消
+         *判断如果在报警时间的0~60分钟内 则对应时间的报警要取消
+         */
     }
     else
     {
+
     }
      logfile.close();
 
@@ -370,7 +435,7 @@ void Widget::WorkTime()
 
     }
         //实现延时关闭
-        if(WorkTimeCal==TimeInput*5)
+        if(WorkTimeCal==TimeInput*5000)
     {
          workTimer->stop();
          this->close();

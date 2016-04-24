@@ -18,6 +18,8 @@
 #define  Finished 1
 #define  UnFinished 2
 #define  TimeDelayClose  16
+#define  AlarmCancel    60
+//取消报警的时间阈值
 
 namespace Ui {
 class Widget;
