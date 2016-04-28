@@ -7,11 +7,9 @@
 
 int main(int argc, char *argv[])
 {
-//    QString UserLogin;
-//    QString TimeInput;
 
     QApplication app(argc, argv);
-    QPixmap pixmap("1.png");
+    QPixmap pixmap("images/start.jpg");
     QSplashScreen splash(pixmap);
     splash.resize(pixmap.size());
     splash.show();
@@ -27,8 +25,8 @@ int main(int argc, char *argv[])
        Widget w;
        w.UserLogin=dlg.CurrentUser;
        w.TimeInput=dlg.WorkTime;
-       qDebug()<<"main UserLogin:"<<w.UserLogin;
-       qDebug()<<"main TimeInput:"<<w.TimeInput;
+//       qDebug()<<"main UserLogin:"<<w.UserLogin;
+//       qDebug()<<"main TimeInput:"<<w.TimeInput;
        w.show();
        return app.exec();
     }

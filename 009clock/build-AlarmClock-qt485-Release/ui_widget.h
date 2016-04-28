@@ -42,17 +42,20 @@ public:
     QTimeEdit *timeEdit1;
     QTimeEdit *timeEdit2;
     QTimeEdit *timeEdit3;
-    QPushButton *LogButton;
+    QPushButton *aboutButton;
+    QPushButton *StartButton;
     QPushButton *quitButton;
     QGroupBox *groupBox_3;
     QTextEdit *textEdit;
-    QPushButton *aboutButton;
+    QGroupBox *groupBox_4;
+    QTextEdit *CurrentStateEdit;
+    QPushButton *StopButton;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
-        Widget->resize(470, 514);
+        Widget->resize(469, 584);
         Widget->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 137, 101);\n"
 "\n"
 ""));
@@ -67,7 +70,7 @@ public:
         lcdNumber->setNumDigits(8);
         groupBox_2 = new QGroupBox(Widget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(30, 140, 401, 151));
+        groupBox_2->setGeometry(QRect(30, 230, 401, 151));
         layoutWidget = new QWidget(groupBox_2);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
         layoutWidget->setGeometry(QRect(50, 30, 301, 111));
@@ -122,20 +125,26 @@ public:
 
         horizontalLayout->addLayout(verticalLayout_2);
 
-        LogButton = new QPushButton(Widget);
-        LogButton->setObjectName(QString::fromUtf8("LogButton"));
-        LogButton->setEnabled(true);
-        LogButton->setGeometry(QRect(60, 450, 93, 28));
-        LogButton->setStyleSheet(QString::fromUtf8(""));
-        LogButton->setAutoDefault(false);
-        LogButton->setDefault(false);
-        LogButton->setFlat(false);
+        aboutButton = new QPushButton(groupBox_2);
+        aboutButton->setObjectName(QString::fromUtf8("aboutButton"));
+        aboutButton->setGeometry(QRect(10, 60, 31, 31));
+        aboutButton->setFlat(true);
+        StartButton = new QPushButton(Widget);
+        StartButton->setObjectName(QString::fromUtf8("StartButton"));
+        StartButton->setEnabled(true);
+        StartButton->setGeometry(QRect(50, 540, 111, 31));
+        StartButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 255, 0);"));
+        StartButton->setAutoDefault(false);
+        StartButton->setDefault(false);
+        StartButton->setFlat(false);
         quitButton = new QPushButton(Widget);
         quitButton->setObjectName(QString::fromUtf8("quitButton"));
-        quitButton->setGeometry(QRect(300, 450, 93, 28));
+        quitButton->setGeometry(QRect(310, 540, 101, 31));
+        quitButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         groupBox_3 = new QGroupBox(Widget);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        groupBox_3->setGeometry(QRect(30, 300, 401, 131));
+        groupBox_3->setGeometry(QRect(30, 390, 401, 131));
         textEdit = new QTextEdit(groupBox_3);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
         textEdit->setGeometry(QRect(20, 20, 361, 101));
@@ -148,10 +157,19 @@ public:
 ""));
         textEdit->setReadOnly(true);
         textEdit->setTabStopWidth(82);
-        aboutButton = new QPushButton(Widget);
-        aboutButton->setObjectName(QString::fromUtf8("aboutButton"));
-        aboutButton->setGeometry(QRect(210, 449, 41, 31));
-        aboutButton->setFlat(true);
+        groupBox_4 = new QGroupBox(Widget);
+        groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
+        groupBox_4->setGeometry(QRect(30, 130, 401, 91));
+        CurrentStateEdit = new QTextEdit(groupBox_4);
+        CurrentStateEdit->setObjectName(QString::fromUtf8("CurrentStateEdit"));
+        CurrentStateEdit->setGeometry(QRect(10, 20, 381, 61));
+        CurrentStateEdit->setStyleSheet(QString::fromUtf8("\n"
+"background-color: rgb(24, 24, 24);"));
+        StopButton = new QPushButton(Widget);
+        StopButton->setObjectName(QString::fromUtf8("StopButton"));
+        StopButton->setGeometry(QRect(180, 540, 111, 31));
+        StopButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"color: rgb(255, 0, 0);"));
 
         retranslateUi(Widget);
         QObject::connect(quitButton, SIGNAL(clicked()), Widget, SLOT(close()));
@@ -179,7 +197,8 @@ public:
         label_3->setText(QApplication::translate("Widget", "\347\254\254\344\270\200\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("Widget", "\347\254\254\344\272\214\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Widget", "\347\254\254\344\270\211\346\254\241\346\217\220\351\206\222", 0, QApplication::UnicodeUTF8));
-        LogButton->setText(QApplication::translate("Widget", "\346\212\245\346\226\207\345\267\262\346\265\217\350\247\210", 0, QApplication::UnicodeUTF8));
+        aboutButton->setText(QString());
+        StartButton->setText(QApplication::translate("Widget", "\345\274\200\345\247\213\346\265\217\350\247\210\346\212\245\346\226\207", 0, QApplication::UnicodeUTF8));
         quitButton->setText(QApplication::translate("Widget", "\351\200\200\345\207\272", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         groupBox_3->setToolTip(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\346\230\276\347\244\272", 0, QApplication::UnicodeUTF8));
@@ -188,7 +207,8 @@ public:
         groupBox_3->setWhatsThis(QString());
 #endif // QT_NO_WHATSTHIS
         groupBox_3->setTitle(QApplication::translate("Widget", "\345\220\216\345\217\260\346\212\245\346\226\207\346\265\217\350\247\210\345\256\214\346\210\220\346\203\205\345\206\265", 0, QApplication::UnicodeUTF8));
-        aboutButton->setText(QString());
+        groupBox_4->setTitle(QApplication::translate("Widget", "\345\275\223\345\211\215\347\212\266\346\200\201", 0, QApplication::UnicodeUTF8));
+        StopButton->setText(QApplication::translate("Widget", "\346\212\245\346\226\207\346\265\217\350\247\210\347\273\223\346\235\237", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -21,15 +21,15 @@
     <rect>
      <x>70</x>
      <y>30</y>
-     <width>261</width>
+     <width>281</width>
      <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 75 10pt &quot;宋体&quot;;</string>
+    <string notr="true">font: 75 14pt &quot;宋体&quot;;</string>
    </property>
    <property name="text">
-    <string>欢迎登陆后台机报文浏览助手系统</string>
+    <string>欢迎登陆监控巡视提示助手系统</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">

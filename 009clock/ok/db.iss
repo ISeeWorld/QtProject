@@ -41,6 +41,8 @@ Source: "D:\QT\MyProject\009clock\ok\2.wav"; DestDir: "{app}"; Flags: ignorevers
 Source: "D:\QT\MyProject\009clock\ok\3.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\4.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\5.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\QT\MyProject\009clock\ok\6.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\QT\MyProject\009clock\ok\7.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\config.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\QT\MyProject\009clock\ok\log.txt"; DestDir: "{app}"; Flags: ignoreversion

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
-    <height>514</height>
+    <width>469</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,7 +60,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>140</y>
+     <y>230</y>
      <width>401</width>
      <height>151</height>
     </rect>
@@ -139,24 +139,41 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="aboutButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
-  <widget class="QPushButton" name="LogButton">
+  <widget class="QPushButton" name="StartButton">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>450</y>
-     <width>93</width>
-     <height>28</height>
+     <x>50</x>
+     <y>540</y>
+     <width>111</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 255, 0);</string>
    </property>
    <property name="text">
-    <string>报文已浏览</string>
+    <string>开始浏览报文</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -171,11 +188,14 @@
   <widget class="QPushButton" name="quitButton">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>450</y>
-     <width>93</width>
-     <height>28</height>
+     <x>310</x>
+     <y>540</y>
+     <width>101</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
    <property name="text">
     <string>退出</string>
@@ -185,7 +205,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>300</y>
+     <y>390</y>
      <width>401</width>
      <height>131</height>
     </rect>
@@ -226,20 +246,48 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="aboutButton">
+  <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>449</y>
-     <width>41</width>
+     <x>30</x>
+     <y>130</y>
+     <width>401</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>当前状态</string>
+   </property>
+   <widget class="QTextEdit" name="CurrentStateEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>381</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgb(24, 24, 24);</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="StopButton">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>540</y>
+     <width>111</width>
      <height>31</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(255, 0, 0);</string>
    </property>
-   <property name="flat">
-    <bool>true</bool>
+   <property name="text">
+    <string>报文浏览结束</string>
    </property>
   </widget>
  </widget>

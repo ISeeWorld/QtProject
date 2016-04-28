@@ -20,6 +20,12 @@
 #define  TimeDelayClose  16
 #define  AlarmCancel    60
 //取消报警的时间阈值
+#define  TimeUpEvent     1
+#define  AfterClicked    2
+#define  LogoutEvent     3
+#define  StartReadEvent  4
+#define  StopReadEvent   5
+#define  QuitEvent       6
 
 namespace Ui {
 class Widget;
@@ -53,7 +59,8 @@ private slots:
     void WorkTime();
 
     void on_aboutButton_clicked();
-    void on_LogButton_clicked();
+    void on_StartButton_clicked();
+    void on_StopButton_clicked();
 };
 
 #endif // WIDGET_H

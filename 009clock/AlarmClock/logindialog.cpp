@@ -11,9 +11,11 @@ LoginDialog::LoginDialog(QWidget *parent) :
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
-    QSound::play("7.wav");
+    QSound::play("voice/Welcome.wav");
+    //播放启动声音
     setFixedSize(400,300);
     setWindowTitle(tr("登录"));
+    //设置界面样式
     ui->LoginButton->setDefault(true);
     ui->PwdlineEdit->setEchoMode( QLineEdit::Password );
     FileName=QString::fromStdString("Log_")+QDateTime::currentDateTime().toString("MM")+QString::fromStdString(".txt");
@@ -44,9 +46,9 @@ void LoginDialog::on_LoginButton_clicked()
             CurrentUser=ui->UsertextEdit->toPlainText();
             index=ui->TimecomboBox->currentIndex();
             WorkTime=hours[index];
-            qDebug()<<"index of TimecomboBox:"<<ui->TimecomboBox->currentIndex();
-            qDebug()<<"WorkTime:"<<WorkTime;
-            qDebug()<<"CurrentUser:"<<CurrentUser;
+//            qDebug()<<"index of TimecomboBox:"<<ui->TimecomboBox->currentIndex();
+//            qDebug()<<"WorkTime:"<<WorkTime;
+//            qDebug()<<"CurrentUser:"<<CurrentUser;
             loginLog(CurrentUser);
         }
         else

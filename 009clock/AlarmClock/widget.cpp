@@ -47,10 +47,13 @@ Widget::Widget(QWidget *parent) :
     //2016年4月1日11:19:01
     connect(workTimer, SIGNAL(timeout()), this, SLOT(WorkTime()));
     showTime();
-    setWindowTitle(tr("后台机报文浏览助手"));
-    setFixedSize(470,514);
+    setWindowTitle(tr("监控巡视提示助手"));
+    setFixedSize(470,584);
     //初始化文字显示颜色
     ui->textEdit->setTextColor( QColor( "blue" ) );
+    ui->CurrentStateEdit->setTextColor( QColor( "blue" ) );
+    ui->CurrentStateEdit->setFont(QFont( "Timers" , 26 ,  QFont::Bold));
+    ui->CurrentStateEdit->setText(" 提示助手工作中");
     FileName=QString::fromStdString("Log_")+QDateTime::currentDateTime().toString("MM")+QString::fromStdString(".txt");
 
 }
@@ -58,6 +61,7 @@ Widget::Widget(QWidget *parent) :
 Widget::~Widget()
 {
     WriteSettings();
+    LogandShow(QuitEvent);
     delete ui;
 }
 
@@ -214,7 +218,7 @@ void Widget::LogandShow(int select)
 //    QTime time = QTime::currentTime();
 //    QString TimeToShow = time.toString("hh:mm:ss");
       QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" ";
-      qDebug()<<"month"<<QDateTime::currentDateTime().toString("MM");
+//      qDebug()<<"month"<<QDateTime::currentDateTime().toString("MM");
       QString UiToShow=TextTimeToShow+"当前监盘人:"+UserLogin+"";
       //    QByteArray TextTime = TextTimeToShow.toLatin1();
 //    const char *c_str1 = TextTime.data();
@@ -223,7 +227,7 @@ void Widget::LogandShow(int select)
       out <<TextTimeToShow<<QString::fromStdString(" 当前监盘人: ")<<UserLogin;
 
     //时间到进行的提示
-    if(select == 1)
+    if(select == TimeUpEvent)
    {
         //声音提醒
 //        QSound::play("1.wav");
@@ -241,7 +245,7 @@ void Widget::LogandShow(int select)
        //初始化超时设置  启动超时定时器
    }
     //点击后进行的记录
-    else if(select == 2)
+    else if(select == AfterClicked)
    {
 
         //判断是否超时
@@ -252,24 +256,18 @@ void Widget::LogandShow(int select)
         {
             //点击确认没有超时
 //            qDebug()<<"TIME UP CTIME:"<<Ctime;
-            QSound::play("2.wav");
+            QSound::play("voice/AterClicked.wav");
             //写入字符转
             ui->textEdit->append(UiToShow+" 点击确认，开始浏览报文！");
-//            logfile.write(c_str1);
-//            logfile.close();
-//            logfile.write(" 点击确认，开始浏览报文！\n");
             out<<QString::fromStdString(" 点击确认，开始浏览报文！\n");
         }
         else
         {
             //点击确认已经超时
-            QSound::play("3.wav");
+            QSound::play("voice/OverTimeClicked.wav");
             ui->textEdit->setTextColor( QColor( "red" ) );
             ui->textEdit->append(UiToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
-//            logfile.write(c_str1);
-//            logfile.close();
-//            logfile.write(" 确认超时，请按时浏览报文！\n");
             out<<QString::fromStdString(" 确认超时，请按时浏览报文！\n");
             Caltimes(UnFinished);
 
@@ -280,20 +278,22 @@ void Widget::LogandShow(int select)
 //        logfile.close();
    }
 
-    else if(select == 3)
+    else if(select == LogoutEvent)
     {
-        QSound::play("5.wav");
+        QSound::play("voice/LogAgain.wav");
         ui->textEdit->setTextColor( QColor( "red" ) );
         ui->textEdit->append(UiToShow+" 时间到，当前用户即将注销，请准备重新登录！");
         ui->textEdit->setTextColor( QColor( "blue" ) );
         out<<QString::fromStdString(" 时间到，当前用户即将注销，请准备重新登录！\n\n");
 
     }
-    else if(select == 4)
+    else if(select == StartReadEvent)
     {
-        QSound::play("6.wav");
-        ui->textEdit->append(UiToShow+" 我已经认真浏览后台机报文！");
-        out<<QString::fromStdString(" 我已经认真浏览后台机报文！！\n");
+        QSound::play("voice/StartRead.wav");
+        ui->textEdit->append(UiToShow+" 我开始认真浏览后台机报文！浏览结束请点击结束按钮");
+        out<<QString::fromStdString(" 我开始认真浏览后台机报文！浏览结束请点击结束按钮\n");
+        ui->CurrentStateEdit->setTextColor( QColor( "red" ) );
+        ui->CurrentStateEdit->setText("  开始浏览报文");
         QTime Currenttime = QTime::currentTime();
         QTime UItime1=ui->timeEdit1->time();
         QTime UItime2=ui->timeEdit2->time();
@@ -329,6 +329,19 @@ void Widget::LogandShow(int select)
          *如果手工自动提前查看报文，则对应报警时间内的报警提醒取消
          *判断如果在报警时间的0~60分钟内 则对应时间的报警要取消
          */
+    }
+    else if(select == StopReadEvent)
+    {
+        QSound::play("voice/StopRead.wav");
+        ui->CurrentStateEdit->setTextColor( QColor( "blue" ) );
+//        ui->CurrentStateEdit->setFont(QFont( "Timers" , 26 ,  QFont::Bold));
+        ui->textEdit->append(UiToShow+" 我已经认真浏览后台机报文！");
+        out<<QString::fromStdString(" 我已经认真浏览后台机报文！！\n");
+        ui->CurrentStateEdit->setText("  报文浏览结束");
+    }
+    else if(select == QuitEvent)
+    {
+         out<<QString::fromStdString(" 用户退出！！\n\n");
     }
     else
     {
@@ -403,7 +416,7 @@ void Widget::Caltimes(int select)
 void Widget::on_aboutButton_clicked()
 {
     QMessageBox message(QMessageBox::NoIcon, "关于", "<br><strong>开发者：温彪</strong><br><br><strong>版本V1.0</strong>");
-    message.setIconPixmap(QPixmap("wb.png"));
+    message.setIconPixmap(QPixmap("images/wb.png"));
     message.exec();
 }
 /*
@@ -413,7 +426,7 @@ void Widget::on_aboutButton_clicked()
 void Widget::PlayMusic()
 {
 
-    QSound::play("1.wav");
+    QSound::play("voice/TimeUp.wav");
     musicTimer->stop();
 
 }
@@ -421,12 +434,12 @@ void Widget::WorkTime()
 {
         if(WorkTimeCal==1)
     {
-         QSound::play("4.wav");
+         QSound::play("voice/LogSuccess.wav");
     }
 
         WorkTimeCal++;
 
-        if(WorkTimeCal==(TimeInput*5-TimeDelayClose))
+        if(WorkTimeCal==(TimeInput*500-TimeDelayClose))
     {
         workTimer->stop();
         LogandShow(3);
@@ -435,7 +448,7 @@ void Widget::WorkTime()
 
     }
         //实现延时关闭
-        if(WorkTimeCal==TimeInput*5000)
+        if(WorkTimeCal==TimeInput*500)
     {
          workTimer->stop();
          this->close();
@@ -446,7 +459,12 @@ void Widget::WorkTime()
 
 }
 
-void Widget::on_LogButton_clicked()
+void Widget::on_StartButton_clicked()
 {
-    LogandShow(4);
+    LogandShow(StartReadEvent);
+}
+
+void Widget::on_StopButton_clicked()
+{
+    LogandShow(StopReadEvent);
 }
