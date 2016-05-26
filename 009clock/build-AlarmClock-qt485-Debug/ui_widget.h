@@ -134,14 +134,17 @@ public:
         StartButton->setEnabled(true);
         StartButton->setGeometry(QRect(50, 540, 111, 31));
         StartButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 255, 0);"));
+"color: rgb(0, 0, 255);\n"
+"font: 9pt \"\345\276\256\350\275\257\351\233\205\351\273\221\";\n"
+""));
         StartButton->setAutoDefault(false);
         StartButton->setDefault(false);
         StartButton->setFlat(false);
         quitButton = new QPushButton(Widget);
         quitButton->setObjectName(QString::fromUtf8("quitButton"));
         quitButton->setGeometry(QRect(310, 540, 101, 31));
-        quitButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
+        quitButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"font: 9pt \"\345\276\256\350\275\257\351\233\205\351\273\221\";"));
         groupBox_3 = new QGroupBox(Widget);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
         groupBox_3->setGeometry(QRect(30, 390, 401, 131));
@@ -163,12 +166,13 @@ public:
         CurrentStateEdit = new QTextEdit(groupBox_4);
         CurrentStateEdit->setObjectName(QString::fromUtf8("CurrentStateEdit"));
         CurrentStateEdit->setGeometry(QRect(10, 20, 381, 61));
-        CurrentStateEdit->setStyleSheet(QString::fromUtf8("\n"
-"background-color: rgb(24, 24, 24);"));
+        CurrentStateEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+""));
         StopButton = new QPushButton(Widget);
         StopButton->setObjectName(QString::fromUtf8("StopButton"));
         StopButton->setGeometry(QRect(180, 540, 111, 31));
         StopButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"font: 9pt \"\345\276\256\350\275\257\351\233\205\351\273\221\";\n"
 "color: rgb(255, 0, 0);"));
 
         retranslateUi(Widget);

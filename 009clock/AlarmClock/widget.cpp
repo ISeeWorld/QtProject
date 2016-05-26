@@ -4,10 +4,13 @@
 
 int TimeUpFlag=1;
 int LoginFlag=1;
+int ShowText=0;//延时显示字符串
+int ShowFlag=1;//记录是否按下开始浏览的按钮
 long WorkTimeCal;
-long CsTimeConfig;
-long AllFinished;
-long AllUnFinished;
+long CsTimeConfig=60;
+
+//long AllFinished;
+//long AllUnFinished;
 int AlarmOne=1,AlarmTwo=1,AlarmThree=1;
 
 QTimer *Alarmtimer = new QTimer;
@@ -21,7 +24,7 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     //初始化读取设置
-    ReadSettings();
+//    ReadSettings();
     Ctime=0;
 //    qDebug()<<"start CTIME:"<<Ctime;
     //字符编码设置
@@ -31,8 +34,6 @@ Widget::Widget(QWidget *parent) :
     QTextCodec::setCodecForCStrings(codec);
     //控件时间初始化设置
     TimeAlarmInit();
-    //播放测试声音
-//    QSound::play("1.wav");
     //创建定时器显示时间
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
@@ -53,14 +54,14 @@ Widget::Widget(QWidget *parent) :
     ui->textEdit->setTextColor( QColor( "blue" ) );
     ui->CurrentStateEdit->setTextColor( QColor( "blue" ) );
     ui->CurrentStateEdit->setFont(QFont( "Timers" , 26 ,  QFont::Bold));
-    ui->CurrentStateEdit->setText(" 提示助手工作中");
+    ui->CurrentStateEdit->setText("   提示助手工作中");
     FileName=QString::fromStdString("Log_")+QDateTime::currentDateTime().toString("MM")+QString::fromStdString(".txt");
 
 }
 
 Widget::~Widget()
 {
-    WriteSettings();
+//    WriteSettings();
     LogandShow(QuitEvent);
     delete ui;
 }
@@ -84,6 +85,16 @@ void Widget::showTime()
 
     ui->lcdNumber->display(text);
 //    qDebug()<<"TIME:"<<text;
+    ShowText++;
+    if(ShowText>=30)
+    {
+       ShowText=0;
+       if(ShowFlag==1)
+       {
+         ui->CurrentStateEdit->setText("   提示助手工作中");
+       }
+
+    }
 }
 /*
  *提醒设置
@@ -105,49 +116,21 @@ void Widget::alarm()
       workTimer->start(500);
     }
 
-//    AllFinished++;
-//    AllUnFinished++;
-////    CsTimeConfig++;
-//    qDebug()<<"alarm AllFinished:"<<AllFinished;
-//    qDebug()<<"alarm AllUnFinished:"<<AllUnFinished;
-//    qDebug()<<"alarm CsTimeConfig:"<<CsTimeConfig;
-//    qDebug()<<"alarm CTIME:"<<Ctime;
-
     int a1h=time.hour()==ui->timeEdit1->time().hour();
     int a1m=time.minute()==ui->timeEdit1->time().minute();
     int a1s=time.second()==ui->timeEdit1->time().second();
     int a1flag=a1h&&a1m&&a1s&&AlarmOne;
 
-//    if((a1h&&a1m&&a1s) == 1)
-//    {
-//        AlarmOne=1;
-//        qDebug()<<"if AlarmOne:"<<AlarmOne;
-//    }
-
-//    qDebug()<<"a1flag:"<<a1flag;
-//    qDebug()<<"AlarmOne:"<<AlarmOne;
     int a2h=time.hour()==ui->timeEdit2->time().hour();
     int a2m=time.minute()==ui->timeEdit2->time().minute();
     int a2s=time.second()==ui->timeEdit2->time().second();
     int a2flag=a2h&&a2m&&a2s&&AlarmTwo;
-//    if(a2h&&a2m&&a2s == 1)
-//    {
-//        AlarmTwo=1;
-//        qDebug()<<"if AlarmTwo:"<<AlarmTwo;
-//    }
-//    qDebug()<<"a2flag:"<<a2flag;
-//    qDebug()<<"AlarmTwo:"<<AlarmTwo;
+
     int a3h=time.hour()==ui->timeEdit3->time().hour();
     int a3m=time.minute()==ui->timeEdit3->time().minute();
     int a3s=time.second()==ui->timeEdit3->time().second();
     int a3flag=a3h&&a3m&&a3s&&AlarmThree;
-//    if(a3h&&a3m&&a3s == 1)
-//    {
-//        AlarmThree=1;
-//        qDebug()<<"if AlarmThree:"<<AlarmThree;
-//    }
-//    qDebug()<<"a3flag:"<<a3flag;
-//    qDebug()<<"AlarmThree:"<<AlarmThree;
+
     if((a1flag||a2flag||a3flag)&&TimeUpFlag)
     {
        TimeUpFlag=0;
@@ -160,9 +143,10 @@ void Widget::alarm()
        while(!TimeUpFlag)
        {
 
-           int btn=QMessageBox::information(NULL, "时间到!", "请浏览后台机报文！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//           Sleep(3000);
-           if(QMessageBox::Yes == btn)
+       QMessageBox message(QMessageBox::NoIcon, "时间到!", "<br><br>请 <strong>"+UserLogin+"</strong> 浏览后台机报文！", QMessageBox::Yes | QMessageBox::No, NULL);
+       message.setIconPixmap(QPixmap("images/clock.png"));
+
+      if(message.exec() == QMessageBox::Yes)
            {
                //停止超时计时器
                Caltimer->stop();
@@ -207,38 +191,27 @@ void Widget::TimeAlarmInit()
 
 void Widget::LogandShow(int select)
 {
-//    qDebug()<<"LogandShowUserLogin:"<<UserLogin;
-//    qDebug()<<"LogandShowTimeInput:"<<TimeInput;
     ui->textEdit->setTextColor( QColor( "blue" ) );
     QFile logfile(FileName);
     if(!logfile.open(QIODevice::ReadWrite|QIODevice::Append| QIODevice::Text))
     {
         QMessageBox::information(NULL, "告警", "Log文件打开失败！", QMessageBox::Yes, QMessageBox::Yes);
     }
-//    QTime time = QTime::currentTime();
-//    QString TimeToShow = time.toString("hh:mm:ss");
-      QString TextTimeToShow =QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+" ";
-//      qDebug()<<"month"<<QDateTime::currentDateTime().toString("MM");
-      QString UiToShow=TextTimeToShow+"当前监盘人:"+UserLogin+"";
-      //    QByteArray TextTime = TextTimeToShow.toLatin1();
-//    const char *c_str1 = TextTime.data();
-//    logfile.write(c_str1);
-      QTextStream out(&logfile);
-      out <<TextTimeToShow<<QString::fromStdString(" 当前监盘人: ")<<UserLogin;
+    QDateTime CurDateTime=QDateTime::currentDateTime();
+    QString TextTimeToShow =CurDateTime.toString("yyyy-MM-dd hh:mm:ss")+" ";
+    QString UiToShow=TextTimeToShow+"当前监盘人:"+UserLogin+"";
+    QTextStream out(&logfile);
+    out <<TextTimeToShow+Encrypt(CurDateTime)<<QString::fromStdString(" 当前监盘人: ")<<UserLogin;
 
     //时间到进行的提示
     if(select == TimeUpEvent)
    {
-        //声音提醒
-//        QSound::play("1.wav");
-//        Sleep(2000);
-        musicTimer->start(1000);
+        musicTimer->start(3000);
         //启用定时器报警
-        Caltimes(Finished);//计数
+//        Caltimes(Finished);//计数
         //显示设置
         ui->textEdit->append(UiToShow+" 时间到，请浏览报文！");
         //文件浏览
-//        logfile.write(" 时间到，请浏览报文！\n");
         out<<QString::fromStdString(" 时间到，请浏览报文！\n");
         //??????????????????????????
         logfile.close();
@@ -269,13 +242,12 @@ void Widget::LogandShow(int select)
             ui->textEdit->append(UiToShow+" 确认超时，请按时浏览报文！");
             ui->textEdit->setTextColor( QColor( "blue" ) );
             out<<QString::fromStdString(" 确认超时，请按时浏览报文！\n");
-            Caltimes(UnFinished);
+//            Caltimes(UnFinished);
 
              //记录超时次数
         }
 
-        WriteSettings();
-//        logfile.close();
+//        WriteSettings();
    }
 
     else if(select == LogoutEvent)
@@ -290,10 +262,13 @@ void Widget::LogandShow(int select)
     else if(select == StartReadEvent)
     {
         QSound::play("voice/StartRead.wav");
-        ui->textEdit->append(UiToShow+" 我开始认真浏览后台机报文！浏览结束请点击结束按钮");
+        ShowFlag=0;
+        ui->textEdit->setTextColor( QColor( "red" ) );
+//        ui->textEdit->setFontWeight(10);
+        ui->textEdit->append(UiToShow+" 我开始认真浏览后台机报文!浏览结束请点击结束按钮");
         out<<QString::fromStdString(" 我开始认真浏览后台机报文！浏览结束请点击结束按钮\n");
         ui->CurrentStateEdit->setTextColor( QColor( "red" ) );
-        ui->CurrentStateEdit->setText("  开始浏览报文");
+        ui->CurrentStateEdit->setText("    开始浏览报文");
         QTime Currenttime = QTime::currentTime();
         QTime UItime1=ui->timeEdit1->time();
         QTime UItime2=ui->timeEdit2->time();
@@ -333,11 +308,12 @@ void Widget::LogandShow(int select)
     else if(select == StopReadEvent)
     {
         QSound::play("voice/StopRead.wav");
+        ShowFlag=1;
         ui->CurrentStateEdit->setTextColor( QColor( "blue" ) );
 //        ui->CurrentStateEdit->setFont(QFont( "Timers" , 26 ,  QFont::Bold));
         ui->textEdit->append(UiToShow+" 我已经认真浏览后台机报文！");
         out<<QString::fromStdString(" 我已经认真浏览后台机报文！！\n");
-        ui->CurrentStateEdit->setText("  报文浏览结束");
+        ui->CurrentStateEdit->setText("    报文浏览结束");
     }
     else if(select == QuitEvent)
     {
@@ -357,62 +333,63 @@ void Widget::LogandShow(int select)
 void Widget::CalTime()
 {
    Ctime++;
-//   qDebug()<<"CalTime i am running!!";
-//   qDebug()<<"CTIME:"<<Ctime;
 }
 /*
  *读取设置
  *2016年3月31日10:45:08
  */
-void Widget::ReadSettings()
-{
-    QSettings *settings = new QSettings ("config.ini", QSettings ::IniFormat);
-    CsTimeConfig=settings->value("config/timeout").toLongLong();
-    AllFinished=settings->value("config/finished").toLongLong();
-    AllUnFinished=settings->value("config/unfinished").toLongLong();
-}
+//void Widget::ReadSettings()
+//{
+//    QSettings *settings = new QSettings ("config.ini", QSettings ::IniFormat);
+//    CsTimeConfig=settings->value("config/timeout").toLongLong();
+//    AllFinished=settings->value("config/finished").toLongLong();
+//    AllUnFinished=settings->value("config/unfinished").toLongLong();
+//}
 
 /*
  *写入设置
  *2016年3月31日10:45:08
  */
-void Widget::WriteSettings()
-{
-    QSettings setting("config.ini",QSettings::IniFormat);//生成配置文件
-    setting.beginGroup("config");//beginGroup与下面endGroup 相对应，“config”是标记
-    QString StrCsTimeConfig,StrAllFinished,StrAllUnFinished;
-    StrCsTimeConfig.setNum(CsTimeConfig);
-    StrAllFinished.setNum(AllFinished);
-    StrAllUnFinished.setNum(AllUnFinished);
-    setting.setValue("timeout",QVariant(StrCsTimeConfig));
-    setting.setValue("finished",QVariant(StrAllFinished));
-    setting.setValue("unfinished",QVariant(StrAllUnFinished));
-    setting.endGroup();
-}
+//void Widget::WriteSettings()
+//{
+//    QSettings setting("config.ini",QSettings::IniFormat);//生成配置文件
+//    setting.beginGroup("config");//beginGroup与下面endGroup 相对应，“config”是标记
+//    QString StrCsTimeConfig,StrAllFinished,StrAllUnFinished;
+//    StrCsTimeConfig.setNum(CsTimeConfig);
+//    StrAllFinished.setNum(AllFinished);
+//    StrAllUnFinished.setNum(AllUnFinished);
+//    setting.setValue("timeout",QVariant(StrCsTimeConfig));
+//    setting.setValue("finished",QVariant(StrAllFinished));
+//    setting.setValue("unfinished",QVariant(StrAllUnFinished));
+//    setting.endGroup();
+//}
 /*
  *记录报文提醒次数与超时浏览事件
  *2016年3月31日15:53:12
  */
-void Widget::Caltimes(int select)
-{
-    if(select==1)
-    {
-        AllFinished++;
-        if(AllFinished>20000000)
-        {
-         AllFinished=0;
-        }
-    }
-    if(select ==2)
-    {
-        AllUnFinished++;
-        if(AllUnFinished>20000000)
-        {
-         AllUnFinished=0;
-        }
-    }
-}
-
+//void Widget::Caltimes(int select)
+//{
+//    if(select==1)
+//    {
+//        AllFinished++;
+//        if(AllFinished>20000000)
+//        {
+//         AllFinished=0;
+//        }
+//    }
+//    if(select ==2)
+//    {
+//        AllUnFinished++;
+//        if(AllUnFinished>20000000)
+//        {
+//         AllUnFinished=0;
+//        }
+//    }
+//}
+/*
+ *2016年5月17日16:15:07
+ *查看软件作者信息
+ */
 void Widget::on_aboutButton_clicked()
 {
     QMessageBox message(QMessageBox::NoIcon, "关于", "<br><strong>开发者：温彪</strong><br><br><strong>版本V1.0</strong>");
@@ -425,11 +402,20 @@ void Widget::on_aboutButton_clicked()
  */
 void Widget::PlayMusic()
 {
-
-    QSound::play("voice/TimeUp.wav");
-    musicTimer->stop();
-
+    if(TimeUpFlag==1)
+    {
+      musicTimer->stop();
+    }
+    else
+    {
+      QSound::play("voice/TimeUp.wav");
+    }
 }
+/*
+ *2016年5月17日16:15:54
+ *软件重启计时，启动后进行时间计算
+ *
+ */
 void Widget::WorkTime()
 {
         if(WorkTimeCal==1)
@@ -458,13 +444,33 @@ void Widget::WorkTime()
     }
 
 }
-
+/*
+ *2016年5月17日16:16:57
+ *开始阅读报文
+ *
+ */
 void Widget::on_StartButton_clicked()
 {
     LogandShow(StartReadEvent);
 }
-
+/*
+ *2016年5月17日16:17:13
+ *结束阅读报文
+ *
+ */
 void Widget::on_StopButton_clicked()
 {
     LogandShow(StopReadEvent);
+}
+/*
+ *2016年5月17日10:43:09
+ *实现日志加时间戳算法
+ *保证生成日志无法被任意篡改
+ */
+QString Widget::Encrypt(QDateTime time)
+{
+//    QDateTime time = QDateTime::currentDateTime();   //获取当前时间
+    int timeT = time.toTime_t();   //将当前时间转为时间戳
+    QString encrypstring=QString::number(timeT,10)+10;
+    return encrypstring.trimmed();
 }

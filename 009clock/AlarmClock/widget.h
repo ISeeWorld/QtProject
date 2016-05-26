@@ -17,7 +17,7 @@
 #define  AfterClick 2
 #define  Finished 1
 #define  UnFinished 2
-#define  TimeDelayClose  16
+#define  TimeDelayClose  30
 #define  AlarmCancel    60
 //取消报警的时间阈值
 #define  TimeUpEvent     1
@@ -38,12 +38,13 @@ public:
     explicit Widget(QWidget *parent = 0);
     void TimeAlarmInit();
     void LogandShow(int select);
-    void ReadSettings();
-    void WriteSettings();
-    void Caltimes(int select);
+//    void ReadSettings();
+//    void WriteSettings();
+//    void Caltimes(int select);
     QString UserLogin;
     QString FileName;
     int TimeInput;
+    QString Encrypt(QDateTime time);
 
 
     ~Widget();

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
 
     QApplication app(argc, argv);
-    QPixmap pixmap("images/start.jpg");
+    QPixmap pixmap("images/start.png");
     QSplashScreen splash(pixmap);
     splash.resize(pixmap.size());
     splash.show();
